@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import sprite_01 from '@/assests/img/sprite_01.png'
 
 export const HeaderWrapper = styled.div`
   height: 75px;
@@ -50,7 +49,7 @@ export const HeaderLeft = styled.div`
           content: '';
           width: 28px;
           height: 19px;
-          background-image: url(${ sprite_01 });
+          background-image: url(${ require('@/assests/img/sprite_01.png') });
           background-position: -190px 0;
           top: 20px;
           right: -15px;

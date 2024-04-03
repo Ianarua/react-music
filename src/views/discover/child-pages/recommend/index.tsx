@@ -1,43 +1,44 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect } from 'react';
 import type { FC, ReactNode } from 'react';
-import request from '@/service';
+import { useAppDispatch } from '@/store';
+import { getRankingDataAction, getRecommendDataAction } from '@/views/discover/child-pages/recommend/store/recommend';
+import TopBanner from '@/views/discover/child-pages/recommend/components/top-banner';
+import { RecommendWrapper } from '@/views/discover/child-pages/recommend/style';
+import HotRecommend from '@/views/discover/child-pages/recommend/components/hot';
+import NewAlbum from '@/views/discover/child-pages/recommend/components/new-album';
+import TopRanking from '@/views/discover/child-pages/recommend/components/top-ranking';
+import UserLogin from '@/views/discover/child-pages/recommend/components/user-login';
+import SettleSinger from '@/views/discover/child-pages/recommend/components/settle-singer';
+import HotAnchor from '@/views/discover/child-pages/recommend/components/hot-anchor';
+
 
 interface IProps {
     children?: ReactNode;
 }
 
-export interface IBannerData {
-    imageUrl: string;
-    targetId: number;
-    targetType: number;
-    titleColor: string;
-    typeTitle: string;
-    url: string;
-    exclusive: boolean;
-    scm: string;
-    bannerBizType: string;
-}
 
 const Recommend: FC<IProps> = (props) => {
-    const [banners, setBanners] = useState<IBannerData[]>([]);
+    const dispatch = useAppDispatch();
     useEffect(() => {
-        request.get({
-            url: '/banner'
-        }).then((res: { banners: IBannerData[] }) => {
-            setBanners(res.banners);
-        });
+        dispatch(getRecommendDataAction());
+        dispatch(getRankingDataAction());
     }, []);
-
     return (
-        <div>
-            {
-                banners.map((item, index) => {
-                    return (
-                        <div key={ index }>{ item.imageUrl }</div>
-                    );
-                })
-            }
-        </div>
+        <RecommendWrapper>
+            <TopBanner/>
+            <div className="content wrap-v2">
+                <div className="left">
+                    <HotRecommend/>
+                    <NewAlbum/>
+                    <TopRanking/>
+                </div>
+                <div className="right">
+                    <UserLogin/>
+                    <SettleSinger/>
+                    <HotAnchor/>
+                </div>
+            </div>
+        </RecommendWrapper>
     );
 };
 
